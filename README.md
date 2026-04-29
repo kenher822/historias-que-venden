@@ -26,7 +26,13 @@ También puedes usar una extensión como Live Server en VS Code para levantar un
 
 ## Deploy
 
-El proyecto fue desplegado con Netlify. Las carpetas y archivos generados para publicación, como `deploy/`, `_zip_check/`, `.netlify/` y archivos `.zip`, no forman parte del código fuente y están excluidos del repositorio.
+El proyecto fue desplegado con Netlify:
+
+[Ver sitio en vivo](https://rad-snickerdoodle-73602f.netlify.app/)
+
+![QR del sitio Historias que Venden](qr-historias-que-venden.png)
+
+Las carpetas y archivos generados para publicación, como `deploy/`, `_zip_check/`, `.netlify/` y archivos `.zip`, no forman parte del código fuente y están excluidos del repositorio.
 
 ## Autor
 
