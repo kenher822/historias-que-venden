@@ -33,7 +33,3 @@ El proyecto fue desplegado con Netlify:
 ![QR del sitio Historias que Venden](qr-historias-que-venden.png)
 
 Las carpetas y archivos generados para publicación, como `deploy/`, `_zip_check/`, `.netlify/` y archivos `.zip`, no forman parte del código fuente y están excluidos del repositorio.
-
-## Autor
-
-Proyecto creado por Ken Herrera como parte de su portafolio personal.
