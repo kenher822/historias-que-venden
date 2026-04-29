@@ -30,6 +30,6 @@ El proyecto fue desplegado con Netlify:
 
 [Ver sitio en vivo](https://rad-snickerdoodle-73602f.netlify.app/)
 
-![QR del sitio Historias que Venden](qr-historias-que-venden.png)
+<img src="qr-historias-que-venden.png" alt="QR del sitio Historias que Venden" width="180">
 
 Las carpetas y archivos generados para publicación, como `deploy/`, `_zip_check/`, `.netlify/` y archivos `.zip`, no forman parte del código fuente y están excluidos del repositorio.
