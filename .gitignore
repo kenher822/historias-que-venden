@@ -1,0 +1,15 @@
+# Deployment/build artifacts
+deploy/
+_zip_check/
+*.zip
+.netlify/
+evengridevents-*.txt
+
+# Local environment
+.env
+.env.local
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/

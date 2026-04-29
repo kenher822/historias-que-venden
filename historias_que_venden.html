@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Historias que venden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c1017;
+  --bg-soft:#141b26;
+  --surface:#161d28;
+  --surface-2:#1c2633;
+  --text:#f8f4ed;
+  --muted:#cfc4b5;
+  --line:rgba(255,255,255,.13);
+  --accent:#e8b55d;
+  --accent-2:#c47e37;
+  --header:#111721;
+  --shadow:0 20px 54px rgba(0,0,0,.28);
+  --shadow-hover:0 28px 72px rgba(0,0,0,.38);
+}
+body.light{
+  --bg:#f7f3ed;
+  --bg-soft:#fffaf2;
+  --surface:#fffdf8;
+  --surface-2:#f1e6d8;
+  --text:#231b16;
+  --muted:#635246;
+  --line:rgba(57,39,25,.15);
+  --accent:#b96f2f;
+  --accent-2:#8f4f24;
+  --header:#fffaf2;
+  --shadow:0 18px 42px rgba(70,44,24,.12);
+  --shadow-hover:0 26px 62px rgba(70,44,24,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:78px}
+body{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  transition:background .25s ease,color .25s ease;
+}
+body.menu-open{overflow:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.container{width:min(1160px,calc(100% - 32px));margin-inline:auto}
+.topbar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:3000;
+  background:var(--header);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 8px 28px rgba(0,0,0,.16);
+}
+.topbar .inner{
+  height:78px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logoMark{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--accent);
+  color:#211407;
+  font-family:"Playfair Display",serif;
+  font-size:1.75rem;
+  font-weight:700;
+  flex:0 0 auto;
+}
+.brandText{
+  font-size:.88rem;
+  font-weight:800;
+  line-height:1.02;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.navDesktop{display:flex;align-items:center;gap:26px}
+.navDesktop a{
+  color:var(--muted);
+  font-weight:700;
+  font-size:.95rem;
+}
+.navDesktop a:hover{color:var(--text)}
+.actions{display:flex;align-items:center;gap:10px}
+.btnIcon,.btnPrimary{
+  border:1px solid var(--line);
+  cursor:pointer;
+  font:inherit;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .2s ease,background .2s ease,color .2s ease;
+}
+.btnIcon{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:var(--surface);
+  color:var(--text);
+  font-size:1.1rem;
+}
+.btnPrimary{
+  min-height:46px;
+  border-radius:999px;
+  padding:0 18px;
+  background:var(--accent);
+  color:#211407;
+  border-color:transparent;
+  font-weight:800;
+}
+.btnIcon:hover,.btnPrimary:hover{transform:translateY(-1px)}
+.menuPanel{
+  position:fixed;
+  top:78px;
+  left:0;
+  right:0;
+  z-index:2800;
+  display:none;
+  background:var(--header);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 28px 44px rgba(0,0,0,.32);
+}
+.menuPanel.open{display:block}
+.menuPanel .wrap{padding:14px 0 18px;display:grid;gap:8px}
+.menuPanel a{
+  display:block;
+  padding:15px 16px;
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:var(--text);
+  font-weight:800;
+}
+.backdrop{
+  position:fixed;
+  inset:78px 0 0;
+  z-index:2700;
+  display:none;
+  background:rgba(4,7,12,.62);
+}
+.backdrop.open{display:block}
+main{padding-top:78px}
+.heroCarousel{
+  position:relative;
+  width:100vw;
+  height:clamp(440px,72vh,700px);
+  overflow:hidden;
+  background:#101010;
+}
+.slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity .7s ease;
+}
+.slide.active{opacity:1}
+.slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+}
+.slide img.focusTop,
+.storyCard img.focusTop,
+.storyMedia img.focusTop{
+  object-position:center top;
+}
+.slide img.focusYasmina{
+  object-position:78% top;
+}
+.slide::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,rgba(0,0,0,.68),rgba(0,0,0,.30) 52%,rgba(0,0,0,.18)),linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.48));
+}
+.heroCopy{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:4;
+  padding:0 0 54px;
+}
+.heroCopy .text{width:min(1160px,calc(100% - 32px));margin-inline:auto;max-width:620px}
+.heroCopy h1{
+  font-family:"Playfair Display",serif;
+  font-size:clamp(2.3rem,5vw,4.5rem);
+  line-height:.96;
+  margin-bottom:12px;
+  color:#fff;
+}
+.heroCopy p{
+  max-width:36rem;
+  color:#f5eadb;
+  font-size:clamp(1rem,1.7vw,1.18rem);
+  line-height:1.65;
+}
+.heroDots{
+  position:absolute;
+  z-index:5;
+  right:24px;
+  bottom:24px;
+  display:flex;
+  gap:9px;
+}
+.heroDots button{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.62);
+  background:rgba(255,255,255,.34);
+  cursor:pointer;
+}
+.heroDots button.active{
+  width:34px;
+  background:var(--accent);
+  border-color:var(--accent);
+}
+.quickCards{padding:34px 0 8px;background:linear-gradient(180deg,var(--bg),var(--bg-soft))}
+.cardsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.storyCard{
+  min-height:330px;
+  position:relative;
+  overflow:hidden;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+  transform:translateY(0);
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+.storyCard img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .62s ease,filter .62s ease;
+}
+.storyCard:hover{
+  transform:translateY(-8px);
+  box-shadow:var(--shadow-hover);
+  border-color:color-mix(in srgb,var(--accent) 52%,var(--line));
+}
+.storyCard:hover img{transform:scale(1.06);filter:saturate(1.05) contrast(1.04)}
+.storyCard::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(130deg,transparent 0%,rgba(255,255,255,.18) 46%,transparent 62%);
+  opacity:0;
+  transform:translateX(-45%);
+  transition:opacity .35s ease,transform .7s ease;
+  pointer-events:none;
+}
+.storyCard:hover::before{opacity:.55;transform:translateX(45%)}
+.storyCard::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(180deg,rgba(0,0,0,.02) 20%,rgba(0,0,0,.42) 58%,rgba(0,0,0,.92) 100%);
+}
+.storyCard .content{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:2;
+  padding:20px;
+}
+.storyCard .tag{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:12px;
+  color:#f8dfb5;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.icon{
+  width:1.1em;
+  height:1.1em;
+  flex:0 0 auto;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.iconDefs{position:absolute;width:0;height:0;overflow:hidden}
+.storyCard h3{
+  font-family:"Playfair Display",serif;
+  color:#fff;
+  font-size:1.85rem;
+  line-height:1.02;
+  margin-bottom:8px;
+}
+.storyCard p{color:#f2eadf;line-height:1.55;font-size:.95rem}
+.section{padding:58px 0;background:var(--bg-soft)}
+.section:nth-of-type(even){background:var(--bg)}
+.sectionTitle{margin-bottom:24px;max-width:820px}
+.sectionTitle small{
+  display:block;
+  color:var(--accent);
+  font-weight:800;
+  letter-spacing:.22em;
+  margin-bottom:10px;
+}
+.sectionTitle h2{
+  font-family:"Playfair Display",serif;
+  font-size:clamp(2rem,4.4vw,3.35rem);
+  line-height:1.02;
+}
+.sectionTitle p{color:var(--muted);line-height:1.8;margin-top:12px}
+.dataRibbon{
+  padding:18px 0 46px;
+  background:var(--bg-soft);
+}
+.dataGrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+.dataCard{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+.dataCard::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0;
+  height:4px;
+  width:var(--fill);
+  background:linear-gradient(90deg,var(--accent),rgba(255,255,255,.28));
+}
+.dataTop{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.dataIcon{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 16%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));
+}
+.dataIcon .icon{width:22px;height:22px}
+.dataNumber{
+  font-family:"Playfair Display",serif;
+  font-size:2.15rem;
+  line-height:1;
+  color:var(--text);
+}
+.dataLabel{
+  color:var(--muted);
+  line-height:1.5;
+  font-size:.93rem;
+}
+.storySection{
+  display:grid;
+  grid-template-columns:minmax(280px,.88fr) minmax(0,1.12fr);
+  gap:28px;
+  align-items:start;
+  padding:24px;
+  margin-bottom:24px;
+  border:1px solid var(--line);
+  border-radius:34px;
+  background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  box-shadow:var(--shadow);
+  transform:translateY(0);
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+.storySection:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--shadow-hover);
+  border-color:color-mix(in srgb,var(--accent) 36%,var(--line));
+}
+.storyMedia{display:grid;gap:12px}
+.storyMedia .main,.storyMedia .mini{
+  overflow:hidden;
+  background:#111;
+  border:1px solid var(--line);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.storyMedia .main{height:420px;border-radius:26px}
+.storyMedia .mini{height:180px;border-radius:22px}
+.storyMedia img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .62s ease,filter .62s ease;
+}
+.storySection:hover .storyMedia img{transform:scale(1.035);filter:saturate(1.04)}
+.storyMedia .stack{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.storyBody h3{
+  font-family:"Playfair Display",serif;
+  font-size:clamp(2rem,3vw,2.85rem);
+  line-height:1.05;
+  margin-bottom:10px;
+}
+.quote{
+  color:var(--accent);
+  font-size:1.06rem;
+  line-height:1.65;
+  font-weight:800;
+  margin-bottom:16px;
+}
+.storyBody p{
+  color:var(--muted);
+  line-height:1.82;
+  margin-bottom:13px;
+}
+.storyBody .factGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:18px 0;
+}
+.fact{
+  display:flex;
+  gap:12px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.04);
+  padding:14px;
+}
+.factIcon{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 14%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));
+  flex:0 0 auto;
+}
+.fact .factIcon,
+.infoList .factIcon{
+  color:var(--accent);
+}
+.factIcon .icon{width:18px;height:18px}
+.fact strong{display:block;color:var(--text);margin-bottom:5px}
+.fact span{color:var(--muted);line-height:1.5;font-size:.94rem}
+.contactSection{background:var(--bg)}
+.aboutFeature{
+  border-radius:34px;
+  border:1px solid var(--line);
+  overflow:hidden;
+  position:relative;
+  background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  box-shadow:var(--shadow);
+  display:grid;
+  transform:translateY(0);
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+.aboutFeature:hover{
+  transform:translateY(-4px);
+  border-color:color-mix(in srgb,var(--accent) 34%,var(--line));
+  box-shadow:var(--shadow-hover);
+}
+.aboutPhotoFrame{
+  position:relative;
+  height:clamp(560px,62vw,780px);
+  overflow:hidden;
+  background:#101720;
+}
+.aboutPhotoFrame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  filter:saturate(.94) contrast(1.04);
+  transform:scale(1);
+  transition:transform .55s ease,filter .55s ease;
+}
+.aboutFeature:hover .aboutPhotoFrame img{
+  transform:scale(1.018);
+  filter:saturate(1.04) contrast(1.08);
+}
+.aboutPhotoFrame::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(5,10,18,.06) 0%,rgba(5,10,18,.03) 58%,rgba(5,10,18,.62) 100%);
+  pointer-events:none;
+}
+.aboutPhotoFrame::before{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:240px;
+  height:76px;
+  z-index:2;
+  background:linear-gradient(90deg,rgba(16,23,32,.96),rgba(16,23,32,.64),transparent);
+  box-shadow:0 0 26px 18px rgba(16,23,32,.36);
+  pointer-events:none;
+}
+.aboutKicker{
+  content:"Equipo estudiantil";
+  position:absolute;
+  left:24px;
+  top:24px;
+  z-index:3;
+  color:#fff;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:.82rem;
+}
+.aboutCard{
+  position:relative;
+  border-top:1px solid var(--line);
+  background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  padding:24px 28px 26px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(240px,.85fr) repeat(3,minmax(0,1fr));
+  gap:22px;
+  align-items:start;
+}
+.aboutCard::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background:linear-gradient(115deg,transparent 0%,color-mix(in srgb,var(--accent) 18%,transparent) 43%,transparent 58%);
+  transform:translateX(-115%);
+  opacity:0;
+  transition:transform .75s ease,opacity .25s ease;
+  pointer-events:none;
+}
+.aboutFeature:hover .aboutCard::after{
+  transform:translateX(115%);
+  opacity:1;
+}
+.aboutCard h3{
+  font-family:"Playfair Display",serif;
+  font-size:clamp(1.65rem,2.4vw,2.35rem);
+  line-height:1.05;
+  margin-bottom:0;
+  color:var(--text);
+}
+.aboutTextItem{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:10px;
+  min-height:100%;
+}
+.aboutTextItem p{
+  color:var(--muted);
+  line-height:1.58;
+  margin:0;
+  font-size:.94rem;
+}
+.aboutChip{
+  display:inline-flex;
+  align-items:center;
+  align-self:flex-start;
+  gap:8px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:10px 13px;
+  color:var(--text);
+  background:color-mix(in srgb,var(--accent) 10%,transparent);
+  border-color:color-mix(in srgb,var(--accent) 24%,var(--line));
+  font-weight:700;
+  font-size:.92rem;
+}
+.aboutChip .icon{color:var(--accent)}
+.contactWrap{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:22px;
+  align-items:stretch;
+}
+.contactPanel{
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+  padding:26px;
+}
+.contactPanel h3{
+  font-family:"Playfair Display",serif;
+  font-size:1.7rem;
+  margin-bottom:12px;
+}
+.contactPanel p{color:var(--muted);line-height:1.8}
+.infoList{display:grid;gap:14px;margin-top:22px}
+.infoList div{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start}
+.infoList p{margin:0}
+.infoList strong{display:block;color:var(--text);margin-bottom:4px}
+.infoList span{color:var(--muted)}
+.form{display:grid;gap:12px}
+.form input,.form textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--bg-soft);
+  color:var(--text);
+  font:inherit;
+  padding:15px 16px;
+  outline:none;
+  border-radius:16px;
+}
+.form input::placeholder,.form textarea::placeholder{color:color-mix(in srgb,var(--muted) 75%,transparent)}
+.form textarea{min-height:170px;resize:vertical}
+.footer{
+  background:var(--header);
+  border-top:1px solid var(--line);
+  padding:28px 0 42px;
+  color:var(--muted);
+}
+.footerBox{display:grid;gap:8px;line-height:1.7}
+.floatingTop{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:2400;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:var(--accent);
+  color:#211407;
+  font-size:1.45rem;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  opacity:0;
+  transform:translateY(12px);
+  pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.floatingTop.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.hideMobile{display:inline-flex}
+@media (max-width: 1020px){
+  .cardsGrid{grid-template-columns:repeat(2,1fr)}
+  .dataGrid{grid-template-columns:repeat(2,1fr)}
+  .storySection{grid-template-columns:1fr}
+  .storyMedia .main{height:390px}
+}
+@media (max-width: 760px){
+  html{scroll-padding-top:70px}
+  .topbar .inner{height:70px}
+  main{padding-top:70px}
+  .menuPanel{top:70px}
+  .backdrop{inset:70px 0 0}
+  .navDesktop,.hideMobile{display:none}
+  .logoMark{width:44px;height:44px;font-size:1.55rem}
+  .brandText{font-size:.76rem}
+  .heroCarousel{height:410px}
+  .heroCopy{padding-bottom:46px}
+  .heroCopy .text{max-width:calc(100% - 32px)}
+  .heroCopy h1{font-size:2.25rem;max-width:12ch}
+  .heroCopy p{font-size:.98rem;line-height:1.55;max-width:22rem}
+  .slide img.focusYasmina{object-position:72% top}
+  .heroDots{right:16px;bottom:16px}
+  .cardsGrid{grid-template-columns:1fr}
+  .dataGrid{grid-template-columns:1fr}
+  .dataRibbon{padding-bottom:34px}
+  .storyCard{min-height:355px}
+  .storyCard{border-radius:24px}
+  .storySection{padding:16px;border-radius:26px}
+  .storyMedia .main{height:310px}
+  .storyMedia .main{border-radius:20px}
+  .storyMedia .mini{border-radius:18px}
+  .storyMedia .stack{grid-template-columns:1fr}
+  .storyBody .factGrid{grid-template-columns:1fr}
+  .aboutFeature{
+    border-radius:26px;
+  }
+  .aboutPhotoFrame{height:430px}
+  .aboutCard{
+    width:100%;
+    margin:0;
+    padding:22px;
+    display:block;
+  }
+  .aboutCard h3{margin-bottom:14px}
+  .aboutTextItem{display:block;margin-top:14px}
+  .aboutTextItem p{margin-bottom:10px}
+  .aboutKicker{left:22px;top:22px}
+  .contactWrap{grid-template-columns:1fr}
+  .section{padding:42px 0}
+}
+</style>
+</head>
+<body>
+<svg class="iconDefs" aria-hidden="true" focusable="false">
+  <symbol id="icon-basket" viewBox="0 0 24 24">
+    <path d="M6 10l3-5"></path><path d="M18 10l-3-5"></path><path d="M4 10h16l-2 9H6l-2-9z"></path><path d="M8 14h8"></path><path d="M9 17h6"></path>
+  </symbol>
+  <symbol id="icon-sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4"></circle><path d="M12 2v3"></path><path d="M12 19v3"></path><path d="M4.9 4.9L7 7"></path><path d="M17 17l2.1 2.1"></path><path d="M2 12h3"></path><path d="M19 12h3"></path><path d="M4.9 19.1L7 17"></path><path d="M17 7l2.1-2.1"></path>
+  </symbol>
+  <symbol id="icon-hands" viewBox="0 0 24 24">
+    <path d="M8 12l3 3a2 2 0 0 0 3 0l1-1"></path><path d="M3 13l4-4 4 4"></path><path d="M21 13l-4-4-4 4"></path><path d="M7 17l2 2h6l2-2"></path>
+  </symbol>
+  <symbol id="icon-fruit" viewBox="0 0 24 24">
+    <path d="M12 7c4 0 7 3 7 7a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6c0-4 3-7 7-7z"></path><path d="M12 7c0-2 1-4 3-5"></path><path d="M13 5c2-1 4 0 5 2-2 1-4 1-5-2z"></path>
+  </symbol>
+  <symbol id="icon-house" viewBox="0 0 24 24">
+    <path d="M4 11l8-7 8 7"></path><path d="M6 10v10h12V10"></path><path d="M10 20v-6h4v6"></path>
+  </symbol>
+  <symbol id="icon-heart" viewBox="0 0 24 24">
+    <path d="M20.4 5.6a5 5 0 0 0-7.1 0L12 6.9l-1.3-1.3a5 5 0 0 0-7.1 7.1L12 21l8.4-8.3a5 5 0 0 0 0-7.1z"></path>
+  </symbol>
+  <symbol id="icon-map" viewBox="0 0 24 24">
+    <path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3z"></path><path d="M9 3v15"></path><path d="M15 6v15"></path>
+  </symbol>
+  <symbol id="icon-message" viewBox="0 0 24 24">
+    <path d="M4 5h16v11H8l-4 4V5z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path>
+  </symbol>
+</svg>
+<header class="topbar">
+  <div class="container inner">
+    <a class="brand" href="#inicio" aria-label="Historias que venden">
+      <div class="logoMark">H</div>
+      <div class="brandText">Historias<br>que venden</div>
+    </a>
+    <nav class="navDesktop" aria-label="Navegación principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#historias">Historias</a>
+      <a href="#acerca">Acerca</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="actions">
+      <button id="themeBtn" class="btnIcon" type="button" aria-label="Cambiar tema">☾</button>
+      <a class="btnPrimary hideMobile" href="#contacto">Contacto</a>
+      <button id="menuBtn" class="btnIcon" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<div id="menuPanel" class="menuPanel" aria-hidden="true">
+  <div class="container wrap">
+    <a href="#inicio">Inicio</a>
+    <a href="#historias">Historias</a>
+    <a href="#acerca">Acerca</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</div>
+<div id="backdrop" class="backdrop"></div>
+
+<main>
+  <section id="inicio" class="hero" aria-label="Historias que venden">
+    <div class="heroCarousel">
+      <article class="slide active">
+        <img class="focusTop" src="assets/images/silvia-1.jpg" alt="Doña Silvia Franco con sus productos">
+        <div class="heroCopy">
+          <div class="text">
+            <h1>Historias que venden</h1>
+            <p>Mujeres que sostienen a sus familias y fortalecen su comunidad con su trabajo diario.</p>
+          </div>
+        </div>
+      </article>
+      <article class="slide">
+        <img src="assets/images/carolina-1.jpg" alt="Doña Carolina frente al Taller de Piñatas Feliz">
+        <div class="heroCopy">
+          <div class="text">
+            <h1>Trabajo con identidad</h1>
+            <p>Tradición, esfuerzo, inclusión y visión de futuro en cada historia.</p>
+          </div>
+        </div>
+      </article>
+      <article class="slide">
+        <img class="focusYasmina" src="assets/images/yasmina-1.jpg" alt="Yasmina Rivera atendiendo su puesto de frutas">
+        <div class="heroCopy">
+          <div class="text">
+            <h1>Voces reales de Chinandega</h1>
+            <p>Relatos de emprendimiento local, dignidad y esperanza.</p>
+          </div>
+        </div>
+      </article>
+      <div class="heroDots" aria-label="Indicadores del carrusel">
+        <button class="active" type="button" aria-label="Ver slide 1"></button>
+        <button type="button" aria-label="Ver slide 2"></button>
+        <button type="button" aria-label="Ver slide 3"></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="quickCards" aria-label="Protagonistas">
+    <div class="container cardsGrid">
+      <a class="storyCard" href="#silvia">
+        <img class="focusTop" src="assets/images/silvia-1.jpg" alt="Doña Silvia Franco sentada con delantal blanco y blusa amarilla">
+        <div class="content">
+          <span class="tag"><svg class="icon"><use href="#icon-basket"></use></svg>Rosquillas y tradición</span>
+          <h3>Doña Silvia Franco</h3>
+          <p>Un punto de venta sostenido por memoria familiar, carisma y sabor local.</p>
+        </div>
+      </a>
+      <a class="storyCard" href="#patricia">
+        <img src="assets/images/patricia-1.jpg" alt="Doña Patricia sonriendo junto a su carrito de venta">
+        <div class="content">
+          <span class="tag"><svg class="icon"><use href="#icon-sun"></use></svg>Oficio de toda una vida</span>
+          <h3>Doña Patricia</h3>
+          <p>Décadas de trabajo diario entre el sol, la calle y la venta de alimentos.</p>
+        </div>
+      </a>
+      <a class="storyCard" href="#carolina">
+        <img src="assets/images/carolina-1.jpg" alt="Doña Carolina frente al Taller de Piñatas Feliz">
+        <div class="content">
+          <span class="tag"><svg class="icon"><use href="#icon-hands"></use></svg>Organización y dignidad</span>
+          <h3>Doña Carolina Torrez</h3>
+          <p>Un taller nacido de mujeres con discapacidad que trabajan juntas por salir adelante.</p>
+        </div>
+      </a>
+      <a class="storyCard" href="#yasmina">
+        <img src="assets/images/yasmina-1.jpg" alt="Yasmina Rivera atendiendo su puesto de frutas con delantal rojo">
+        <div class="content">
+          <span class="tag"><svg class="icon"><use href="#icon-fruit"></use></svg>Frutas de temporada</span>
+          <h3>Yasmina Rivera</h3>
+          <p>Un puesto que sostiene a su familia con constancia, atención y esperanza.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="dataRibbon" aria-label="Datos de las historias">
+    <div class="container dataGrid">
+      <div class="dataCard" style="--fill:72%">
+        <div class="dataTop">
+          <div class="dataIcon"><svg class="icon"><use href="#icon-sun"></use></svg></div>
+          <div class="dataNumber">45</div>
+        </div>
+        <div class="dataLabel">años de venta y aprendizaje en la historia de Doña Patricia.</div>
+      </div>
+      <div class="dataCard" style="--fill:90%">
+        <div class="dataTop">
+          <div class="dataIcon"><svg class="icon"><use href="#icon-hands"></use></svg></div>
+          <div class="dataNumber">125</div>
+        </div>
+        <div class="dataLabel">mujeres afiliadas a la organización vinculada al taller.</div>
+      </div>
+      <div class="dataCard" style="--fill:66%">
+        <div class="dataTop">
+          <div class="dataIcon"><svg class="icon"><use href="#icon-map"></use></svg></div>
+          <div class="dataNumber">13</div>
+        </div>
+        <div class="dataLabel">municipios de Chinandega alcanzados por la organización.</div>
+      </div>
+      <div class="dataCard" style="--fill:58%">
+        <div class="dataTop">
+          <div class="dataIcon"><svg class="icon"><use href="#icon-fruit"></use></svg></div>
+          <div class="dataNumber">30</div>
+        </div>
+        <div class="dataLabel">bolsas de mango que Yasmina puede vender en un buen día.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="historias" class="section">
+    <div class="container">
+      <div class="sectionTitle">
+        <small>HISTORIAS</small>
+        <h2>Mujeres que sostienen el día a día</h2>
+        <p>Cuatro relatos de emprendimiento local en Chinandega, marcados por el trabajo constante, la memoria familiar, la organización comunitaria y el deseo de seguir avanzando.</p>
+      </div>
+
+      <article id="silvia" class="storySection">
+        <div class="storyMedia">
+          <div class="main"><img class="focusTop" src="assets/images/silvia-1.jpg" alt="Doña Silvia Franco con delantal blanco con corazón de colores"></div>
+          <div class="stack">
+            <div class="mini"><img src="assets/images/silvia-2.jpg" alt="Ilustración de rosquillas de Doña Silvia"></div>
+            <div class="mini"><img class="focusTop" src="assets/images/silvia-1.jpg" alt="Productos de Doña Silvia Franco"></div>
+          </div>
+        </div>
+        <div class="storyBody">
+          <h3>Doña Silvia Franco</h3>
+          <div class="quote">Rosquillas, tradición y carisma al servicio de su comunidad.</div>
+          <p>Doña Silvia Franco es vendedora, un oficio que desempeña desde joven bajo la influencia de su abuela. Lleva aproximadamente nueve años trabajando en su negocio actual, que se ha convertido en un punto de referencia para habitantes de barrios como Guadalupe y El Calvario.</p>
+          <p>Su historia comenzó con la venta de tamales de elote, pero con el tiempo su camino evolucionó hacia las rosquillas. Esa transición conserva una raíz familiar y comunitaria: el trabajo aprendido, la atención cotidiana y el valor de ofrecer productos reconocidos por su sabor.</p>
+          <p>Silvia distribuye y vende productos elaborados en el taller de la señora Tamara Reyes, ubicado en El Viejo. Gracias a la calidad del producto y a su trato cercano, su negocio es una fuente de sustento y también un puente con la repostería tradicional nicaragüense.</p>
+          <div class="factGrid">
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-house"></use></svg></span><div><strong>Oficio</strong><span>Vendedora formada desde joven por el ejemplo de su abuela.</span></div></div>
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-basket"></use></svg></span><div><strong>Especialidad</strong><span>Rosquillas y productos tradicionales vinculados a El Viejo.</span></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article id="patricia" class="storySection">
+        <div class="storyMedia">
+          <div class="main"><img src="assets/images/patricia-1.jpg" alt="Doña Patricia sonriendo junto a su carrito de venta"></div>
+          <div class="stack">
+            <div class="mini"><img src="assets/images/patricia-2.jpg" alt="Elotes asados de Doña Patricia"></div>
+            <div class="mini"><img src="assets/images/patricia-3.jpg" alt="Ilustración de elotes asados"></div>
+          </div>
+        </div>
+        <div class="storyBody">
+          <h3>Doña Patricia</h3>
+          <div class="quote">“Se acostumbró al sol en la cara y al ruido de la calle como si la vida no le debiera nada”.</div>
+          <p>La historia de Doña Patricia empieza en la infancia. Su madre le enseñó el oficio de las ventas cuando tenía siete años, en una época en la que el trabajo inmediato era una prioridad para la supervivencia familiar.</p>
+          <p>Lo que comenzó como una lección infantil se convirtió en una trayectoria de 45 años. Durante décadas ha sostenido su comercio con disciplina, presencia diaria y una relación directa con las personas que compran sus productos.</p>
+          <p>Su negocio expresa el desgaste invisible del comerciante: estar de pie, salir temprano, cuidar el producto y resistir el clima de la calle. Detrás de cada venta hay una historia de sacrificio, tradición familiar y constancia.</p>
+          <div class="factGrid">
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-sun"></use></svg></span><div><strong>Trayectoria</strong><span>45 años de venta y aprendizaje heredado desde la niñez.</span></div></div>
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-basket"></use></svg></span><div><strong>Apoyo visual</strong><span>Los elotes asados se muestran como parte de su entorno de venta.</span></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article id="carolina" class="storySection">
+        <div class="storyMedia">
+          <div class="main"><img src="assets/images/carolina-1.jpg" alt="Doña Carolina frente al Taller de Piñatas Feliz"></div>
+          <div class="stack">
+            <div class="mini"><img src="assets/images/carolina-2.jpg" alt="Logo del Taller de Piñatas Feliz"></div>
+            <div class="mini"><img src="assets/images/carolina-1.jpg" alt="Organización de mujeres con discapacidad en Chinandega"></div>
+          </div>
+        </div>
+        <div class="storyBody">
+          <h3>Doña Carolina Torrez</h3>
+          <div class="quote">Producción, organización y esperanza sostenidas por mujeres que trabajan juntas.</div>
+          <p>Doña Carolina Torrez forma parte de una organización de mujeres con discapacidad. El local central está en Chinandega, pero al contar con personería jurídica atienden a los 13 municipios del departamento.</p>
+          <p>Actualmente la organización reúne a 125 mujeres afiliadas. Como el espacio físico es pequeño, muchas trabajan desde sus casas y llevan las piñatas al local para su venta. Ese modelo permite que el esfuerzo colectivo siga activo aunque los recursos sean limitados.</p>
+          <p>La organización nació en 1992 por una necesidad social. En 1994, a través de un proyecto con un fraile llamado Guillermo y la organización INATEC, las fundadoras recibieron cursos de elaboración de piñatas y peluches. De esos cursos nació formalmente el taller, iniciando con un grupo de 12 compañeras con discapacidad.</p>
+          <p>Las ventas son variables: hay días en los que no se vende nada, pero se mantienen con esperanza y esfuerzo diario. Para ellas, vender dos piñatas o recibir un encargo al día ya representa una gran venta.</p>
+          <div class="factGrid">
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-heart"></use></svg></span><div><strong>Origen</strong><span>Una organización nacida en 1992 por una necesidad social.</span></div></div>
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-map"></use></svg></span><div><strong>Alcance</strong><span>125 mujeres afiliadas en los municipios de Chinandega.</span></div></div>
+          </div>
+        </div>
+      </article>
+
+      <article id="yasmina" class="storySection">
+        <div class="storyMedia">
+          <div class="main"><img src="assets/images/yasmina-1.jpg" alt="Yasmina Rivera con delantal rojo en su puesto de frutas"></div>
+          <div class="stack">
+            <div class="mini"><img src="assets/images/yasmina-2.jpg" alt="Ilustración de Delicias Yasmina"></div>
+            <div class="mini"><img src="assets/images/yasmina-1.jpg" alt="Frutas y productos del puesto de Yasmina Rivera"></div>
+          </div>
+        </div>
+        <div class="storyBody">
+          <h3>Yasmina Rivera</h3>
+          <div class="quote">“Cada moneda que recibe es un alivio para su historia”.</div>
+          <p>Yasmina Rivera vende productos variados, destacando principalmente las bolsitas de mango. En un día bueno llega a vender aproximadamente 30 bolsas, una meta que refleja la constancia de su trabajo diario.</p>
+          <p>Gracias a este puesto ha logrado mantener la economía de su familia y sus hijos, reinvirtiendo las ganancias para que el negocio siga funcionando. Su historia muestra cómo un pequeño punto de venta puede convertirse en apoyo esencial para un hogar.</p>
+          <p>En el futuro, Yasmina llegó a pensar en estudiar Enfermería. Comenta que no logró realizar esos estudios no por falta de apoyo de sus padres, sino por una decisión personal en aquel momento. Hoy se siente satisfecha de cómo su negocio le permite salir adelante.</p>
+          <p>Su experiencia representa el comercio local de Chinandega, donde la venta de frutas de temporada sostiene a muchas familias. “La necesidad le enseñó tanto que ahora el cansancio le parece normal”.</p>
+          <div class="factGrid">
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-fruit"></use></svg></span><div><strong>Producto destacado</strong><span>Bolsitas de mango y frutas de temporada.</span></div></div>
+            <div class="fact"><span class="factIcon"><svg class="icon"><use href="#icon-heart"></use></svg></span><div><strong>Sustento</strong><span>Un puesto que ayuda a mantener a su familia y a sus hijos.</span></div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="acerca" class="section">
+    <div class="container">
+      <div class="sectionTitle">
+        <small>ACERCA</small>
+        <h2>El equipo detrás de las historias</h2>
+        <p>Este proyecto nace del encuentro entre estudiantes, comunidad y mujeres emprendedoras de Chinandega.</p>
+      </div>
+      <div class="aboutFeature">
+        <div class="aboutPhotoFrame">
+          <img src="assets/images/estudiantes.jpeg" alt="Alumnos del Centro de Educación Mercantil de Occidente durante una visita de campo">
+          <div class="aboutKicker">Equipo estudiantil</div>
+        </div>
+        <div class="aboutCard">
+          <h3>Alumnos del Centro de Educación Mercantil de Occidente</h3>
+          <div class="aboutTextItem">
+            <p>Historias que venden fue desarrollado por alumnos del Centro de Educación Mercantil de Occidente de Chinandega para reconocer el trabajo de mujeres emprendedoras de su comunidad.</p>
+            <span class="aboutChip"><svg class="icon"><use href="#icon-map"></use></svg>Chinandega</span>
+          </div>
+          <div class="aboutTextItem">
+            <p>El proyecto une aprendizaje y observación de campo: escuchar, dialogar y valorar el comercio local que da vida a Chinandega.</p>
+            <span class="aboutChip"><svg class="icon"><use href="#icon-message"></use></svg>Aprendizaje en campo</span>
+          </div>
+          <div class="aboutTextItem">
+            <p>La mirada estudiantil presenta estos relatos con respeto, dignidad y esperanza.</p>
+            <span class="aboutChip"><svg class="icon"><use href="#icon-heart"></use></svg>Compromiso comunitario</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="section contactSection">
+    <div class="container">
+      <div class="sectionTitle">
+        <small>CONTACTO</small>
+        <h2>Contacto</h2>
+        <p>Conversemos sobre estas historias y su impacto.</p>
+      </div>
+      <div class="contactWrap">
+        <div class="contactPanel">
+          <h3>Vínculos con sentido humano</h3>
+          <p>Este espacio puede servir para compartir comentarios, proponer colaboraciones o dar seguimiento a iniciativas que fortalezcan el trabajo de las mujeres emprendedoras que aparecen en esta página.</p>
+          <div class="infoList">
+            <div><span class="factIcon"><svg class="icon"><use href="#icon-map"></use></svg></span><p><strong>Ubicación</strong><span>Chinandega, Nicaragua</span></p></div>
+            <div><span class="factIcon"><svg class="icon"><use href="#icon-message"></use></svg></span><p><strong>Enfoque</strong><span>Historias reales, emprendimiento local y visibilización comunitaria.</span></p></div>
+          </div>
+        </div>
+        <div class="contactPanel">
+          <form class="form">
+            <input type="text" placeholder="Tu nombre" aria-label="Tu nombre">
+            <input type="email" placeholder="Tu correo" aria-label="Tu correo">
+            <textarea placeholder="Escribe tu mensaje" aria-label="Escribe tu mensaje"></textarea>
+            <button type="button" class="btnPrimary">Enviar mensaje</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footerBox">
+      <div>Historias de mujeres emprendedoras que sostienen a sus familias, preservan oficios y fortalecen su comunidad con su trabajo diario.</div>
+      <div>Voces reales de Chinandega marcadas por la constancia, la dignidad y la esperanza.</div>
+    </div>
+  </footer>
+</main>
+
+<button class="floatingTop" id="toTop" type="button" aria-label="Volver arriba">↑</button>
+
+<script>
+const body = document.body;
+const menuBtn = document.getElementById('menuBtn');
+const menuPanel = document.getElementById('menuPanel');
+const backdrop = document.getElementById('backdrop');
+const themeBtn = document.getElementById('themeBtn');
+const toTop = document.getElementById('toTop');
+const slides = [...document.querySelectorAll('.slide')];
+const dots = [...document.querySelectorAll('.heroDots button')];
+let activeSlide = 0;
+let carouselTimer;
+
+function closeMenu(){
+  menuPanel.classList.remove('open');
+  backdrop.classList.remove('open');
+  body.classList.remove('menu-open');
+  menuPanel.setAttribute('aria-hidden','true');
+  menuBtn.setAttribute('aria-expanded','false');
+  menuBtn.textContent = '☰';
+}
+
+menuBtn.addEventListener('click', () => {
+  const open = !menuPanel.classList.contains('open');
+  menuPanel.classList.toggle('open', open);
+  backdrop.classList.toggle('open', open);
+  body.classList.toggle('menu-open', open);
+  menuPanel.setAttribute('aria-hidden', String(!open));
+  menuBtn.setAttribute('aria-expanded', String(open));
+  menuBtn.textContent = open ? '×' : '☰';
+});
+
+backdrop.addEventListener('click', closeMenu);
+document.querySelectorAll('.menuPanel a, .navDesktop a, .storyCard, .brand').forEach(link => {
+  link.addEventListener('click', closeMenu);
+});
+
+const savedTheme = localStorage.getItem('hqv-theme');
+if(savedTheme === 'light') body.classList.add('light');
+themeBtn.textContent = body.classList.contains('light') ? '☀' : '☾';
+
+themeBtn.addEventListener('click', () => {
+  body.classList.toggle('light');
+  const light = body.classList.contains('light');
+  themeBtn.textContent = light ? '☀' : '☾';
+  localStorage.setItem('hqv-theme', light ? 'light' : 'dark');
+});
+
+function showSlide(index){
+  activeSlide = (index + slides.length) % slides.length;
+  slides.forEach((slide, i) => slide.classList.toggle('active', i === activeSlide));
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === activeSlide));
+}
+
+function startCarousel(){
+  clearInterval(carouselTimer);
+  carouselTimer = setInterval(() => showSlide(activeSlide + 1), 5200);
+}
+
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    showSlide(i);
+    startCarousel();
+  });
+});
+
+window.addEventListener('scroll', () => {
+  toTop.classList.toggle('show', window.scrollY > 520);
+});
+
+toTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+document.addEventListener('keydown', event => {
+  if(event.key === 'Escape') closeMenu();
+});
+
+startCarousel();
+</script>
+</body>
+</html>
